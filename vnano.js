@@ -4,7 +4,7 @@ let titulo="my site"
 document.title= titulo
 
 let setnanotextinho = null;
-const version = "1.0";
+const version = "1.1";
 let pagename = document.title;
 let setcordefundo = "";
 
@@ -180,5 +180,51 @@ console.log("🤓você consegue resolver!")
     } finally {
     }
 }
+function ofuscarCodigoSite() {
+    // Captura todos os scripts da página
+    const scripts = document.querySelectorAll('script');
 
+    scripts.forEach(script => {
+        if (!script.src) {
+            // Ofusca apenas scripts inline (sem src)
+            const codigoOriginal = script.innerHTML;
+            const codigoOfuscado = ofuscarCodigo(codigoOriginal);
+            script.innerHTML = codigoOfuscado;
+        }
+    });
+function ofuscarCodigo(codigo) {
+    // Remove comentários
+    codigo = codigo.replace(/\/\/.*|\/\*[\s\S]*?\*\//g, '');
+    // Remove espaços extras
+    codigo = codigo.replace(/\s+/g, ' ');
+    // Remove espaços no início e no fim
+    codigo = codigo.trim();
+
+    // Renomeia variáveis e funções
+    const variaveis = codigo.match(/\b(let|const|var)\s+(\w+)\b/g) || [];
+    const funcoes = codigo.match(/\bfunction\s+(\w+)\b/g) || [];
+
+    const mapaRenomeacao = {};
+
+    // Renomeia variáveis
+    variaveis.forEach((variavel, index) => {
+        const nomeOriginal = variavel.split(/\s+/)[1];
+        const novoNome = `_${index}`;
+        mapaRenomeacao[nomeOriginal] = novoNome;
+        codigo = codigo.replace(new RegExp(`\\b${nomeOriginal}\\b`, 'g'), novoNome);
+    });
+
+    funcoes.forEach((funcao, index) => {
+        const nomeOriginal = funcao.split(/\s+/)[1];
+        const novoNome = `f${index}`;
+        mapaRenomeacao[nomeOriginal] = novoNome;
+        codigo = codigo.replace(new RegExp(`\\b${nomeOriginal}\\b`, 'g'), novoNome);
+    });
+
+    return codigo;
+}
+    console.log('Código do site ofuscado com sucesso!');
+}
+
+window.addEventListener('load', ofuscarCodigoSite);
 executarComSeguranca(codigoQuePodeFalhar);
