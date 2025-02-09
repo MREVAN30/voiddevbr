@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure c0de - Ofuscador de JavaScript</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/css/materialdesignicons.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M13.89 11.7a2 2 0 0 0-3.78 0l-2 6a2 2 0 1 0 3.78 0l2-6zM12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z' fill='%23ff6f61'/></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            width: 100%;
+            max-width: 800px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-align: center;
+            animation: slideDown 1s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        h1 .mdi {
+            font-size: 2.5rem;
+            color: #ff6f61;
+        }
+
+        p {
+            font-size: 1.1rem;
+            text-align: center;
+            margin-bottom: 20px;
+            animation: slideUp 1s ease-in-out;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            resize: none;
+            transition: background 0.3s ease;
+        }
+
+        textarea:focus {
+            background: rgba(255, 255, 255, 0.3);
+            outline: none;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px;
+            background: linear-gradient(135deg, #ff6f61, #ff4d4d);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.3s ease, background 0.3s ease;
+            animation: pulse 2s infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, #ff4d4d, #ff6f61);
+        }
+
+        .output-container {
+            position: relative;
+            margin-top: 20px;
+        }
+
+        pre {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 20px;
+            right: 10px;
+            padding: 10px;
+            background: none;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .copy-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        footer a {
+            color: #ff6f61;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 1000;
+            animation: fadeOut 1s ease-in-out 2s forwards;
+        }
+
+        .loader .mdi {
+            font-size: 4rem;
+            color: #ff6f61;
+            animation: spin 2s linear infinite;
+        }
+
+        .loader p {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #fff;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+
+            textarea {
+                height: 150px;
+            }
+
+            button {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loader">
+        <span class="mdi mdi-loading"></span>
+        <p>Carregando...</p>
+    </div>
+
+    <div class="container">
+        <h1>
+            <span class="mdi mdi-lock"></span>
+            Secure c0de
+        </h1>
+        <p>Proteja seu código JavaScript com nosso ofuscador avançado. Cole seu código abaixo e clique em "Ofuscar".</p>
+        <textarea id="inputCode" placeholder="Cole seu código JavaScript aqui..."></textarea>
+        <div class="buttons">
+            <button onclick="obfuscateCode()">
+                <span class="mdi mdi-shield-lock"></span>
+                Ofuscar Código
+            </button>
+        </div>
+        <div class="output-container">
+            <pre id="outputCode"></pre>
+            <button class="copy-button" onclick="copyCode()">
+                <span class="mdi mdi-content-copy"></span>
+            </button>
+        </div>
+        <footer>
+            Desenvolvido com ❤️ por <strong>Ninja Shadow e Void</strong> | Usando <a href="https://github.com/javascript-obfuscator/javascript-obfuscator" target="_blank">javascript-obfuscator</a>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/javascript-obfuscator/dist/index.browser.js"></script>
+    <script>
+        function obfuscateCode() {
+            const inputCode = document.getElementById('inputCode').value;
+            const options = {
+                compact: true,
+                controlFlowFlattening: true,
+                deadCodeInjection: true,
+                debugProtection: true,
+                stringArray: true,
+                rotateStringArray: true,
+                selfDefending: true,
+            };
+            try {
+                const obfuscatedCode = JavaScriptObfuscator.obfuscate(inputCode, options).getObfuscatedCode();
+                document.getElementById('outputCode').textContent = obfuscatedCode;
+            } catch (error) {
+                document.getElementById('outputCode').textContent = "Erro ao ofuscar o código: " + error.message;
+            }
+        }
+
+        function copyCode() {
+            const outputCode = document.getElementById('outputCode').textContent;
+            navigator.clipboard.writeText(outputCode).then(() => {
+                alert('Código copiado para a área de transferência!');
+            }).catch(err => {
+                alert('Erro ao copiar o código: ' + err);
+            });
+        }
+    </script>
+</body>
+</html>
